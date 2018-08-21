@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+	<table border="1">
+		<tr>
+			<td>BookRank</td>
+			<td>BookStore</td>
+			<td>Title</td>
+			<td>Writer</td>
+			<td>SalePrice</td>
+			<td>Detail</td>
+			<td>publishDay</td>
+		</tr>
+		<tr th:each="list:${list}">
+			<td th:text="${list.book_rank}"></td>
+			<td th:text="${list.book_store}"></td>
+			<td th:text="${list.title}"></td>
+			<td th:text="${list.writer}"></td>
+			<td th:text="${list.sale_price}"></td>
+			<td th:text="${list.detail}"></td>
+			<td th:text="${list.publish_day}"></td>
+		</tr>
+	</table>
+</body>
+</html>

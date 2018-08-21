@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="webjars/jquery/2.1.3/dist/jquery.min.js"></script>
+</head>
+<script>
+	$(document).ready(function(){
+		document.getElementById('date').valueAsDate = new Date();
+		
+		$("#search").click(function(){
+			searchVo = new Object();
+			var title = $("#title").val();
+			var writer = $("#writer").val();
+			var date = $("#date").val();
+			
+			console.log(date);
+			
+			searchVo.title = title;
+			searchVo.writer = writer;
+			searchVo.keyValue = date;
+			var jsonData = JSON.stringify(searchVo);
+			
+			$.ajax({
+				type : "POST",
+				url : "/findBook/search",
+				dataType : "json",
+				data : jsonData,
+				contentType : "application/json; charset=utf-8",
+				success : function(data){
+					console.log(data);
+					$("#searchTable").html();
+					var searchValue;
+					for(var i=0; i < data.length; i++){
+						searchValue += "<table><tr><td>";
+						searchValue += data[i].book_rank;
+						searchValue += "</td></tr><tr><td>"
+						searchValue += data[i].title;
+						searchValue += "</td></tr><tr><td>";
+						searchValue += data[i].writer;
+						searchValue += "</td></tr><tr><td>"
+						searchValue += data[i].detail;
+						searchValue += "</td></tr><tr><td>";
+						searchValue += data[i].publish_day;
+						searchValue += "</td></tr><tr><td>"
+						searchValue += data[i].sale_price + "</td></tr></table>";
+						searchValue += "<hr>"
+						$("#searchTable").html(searchValue);
+					}
+				},
+				error : function(){
+					
+				}
+			})
+		});
+		
+		$("#All").click(function(){
+			searchVo = new Object();
+			
+			var date = $("#date").val();
+			searchVo.keyValue = date;
+			var jsonData = JSON.stringify(searchVo);
+			
+			$.ajax({
+				type : "POST",
+				url : "/findBook/All",
+				dataType : "json",
+				data : jsonData,
+				contentType : "application/json; charset=utf-8",
+				success : function(data){
+					var searchValue;
+					console.log(data.length);
+					
+					for(var i=0; i < data.length; i++){
+						searchValue += "<table><tr><td>";
+						searchValue += data[i].book_rank;
+						searchValue += "</td></tr><tr><td>"
+						searchValue += data[i].title;
+						searchValue += "</td></tr><tr><td>";
+						searchValue += data[i].writer;
+						searchValue += "</td></tr><tr><td>"
+						searchValue += data[i].detail;
+						searchValue += "</td></tr><tr><td>";
+						searchValue += data[i].publish_day;
+						searchValue += "</td></tr><tr><td>"
+						searchValue += data[i].sale_price + "</td></tr></table>";
+						searchValue += "<hr>"
+						$("#searchTable").html(searchValue);
+					}
+				}
+			})
+		});
+	})
+</script>
+<body>
+	<form action="/SearchBook" method="post">
+		
+	</form>
+	
+	<div>
+		<label>Title : </label>
+		<input type = "text" name = "title" placeholder="title" id="title">
+		&nbsp;&nbsp;
+		<label>Writer : </label>
+		<input type = "text" name = "writer" placeholder="writer" id="writer">
+		&nbsp;&nbsp;
+		<label>Date : </label>
+		<input type = "date" name = "date" id = "date">
+	</div>
+	<button type = "submit" id="search">Search</button>
+	<button type = "submit" id="All">전체보기</button>
+	<hr>
+	
+	<div id = "searchTable">
+		
+	</div>
+	
+</body>
+</html>
